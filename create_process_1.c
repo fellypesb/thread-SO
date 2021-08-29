@@ -15,7 +15,7 @@ int main(void)
 	if(pid2==0)
 	{
 		pid2 = fork();
-	}else
+	}
 
 	getchar();
 
