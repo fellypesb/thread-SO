@@ -3,7 +3,7 @@
 #include <time.h>
 #include <pthread.h>
 
-#define SIZE 70000
+#define SIZE 30000
 #define N_THREAD 4
 
 int list[SIZE];
@@ -73,7 +73,6 @@ int main(void) {
 
 	printf("%.5lf s\n", ((double)t) / CLOCKS_PER_SEC);
 	
-	t = clock();
 
 	for (i = 0; i < N_THREAD; i++) pthread_create(&thread[i], NULL, tfill, &list);
 	for (i = 0; i < N_THREAD; i++) pthread_join(thread[i], NULL);
