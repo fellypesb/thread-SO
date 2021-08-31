@@ -4,8 +4,11 @@
 #include <pthread.h>
 
 #define SIZE 70000
-#define N_THREAD 6
+#define N_THREAD 4
 
+int list[SIZE];
+
+// Swaps two numbers
 void swap(int *a, int *b) {
 	int aux = *a;
 	*a = *b;
@@ -32,9 +35,32 @@ void *sort(void *list) {
 	}
 }
 
+void *tfill(void *arg){
+	int *n = arg;
+	int min, max;
+
+	min = (*n) * (SIZE / N_THREAD);
+	max = (*n + 1) * (SIZE / N_THREAD);
+
+	for(min; min < max - 1; min++) list[min] = rand() / (RAND_MAX / SIZE);
+
+}
+
+// Sorts a list with threads
+void *tsort(void *arg) {
+	int *n = arg;
+	int min, j, max;
+
+	min = (*n) * (SIZE / N_THREAD);
+	max = (*n + 1) * (SIZE / N_THREAD);
+
+	for (min; min < max - 2; min++) {
+		for (j = min; j < max - 1; j++) if (list[j] < list[min]) swap(&list[j], &list[min]);
+	}
+}
+
 int main(void) {
 	pthread_t thread[N_THREAD];
-	int list[SIZE];
 	int i;
 	clock_t t;
 
@@ -49,10 +75,10 @@ int main(void) {
 	
 	t = clock();
 
-	for (i = 0; i < N_THREAD; i++) pthread_create(&thread[i], NULL, fill, &list);
+	for (i = 0; i < N_THREAD; i++) pthread_create(&thread[i], NULL, tfill, &list);
 	for (i = 0; i < N_THREAD; i++) pthread_join(thread[i], NULL);
 
-	for (i = 0; i < N_THREAD; i++) pthread_create(&thread[i], NULL, sort, &list);
+	for (i = 0; i < N_THREAD; i++) pthread_create(&thread[i], NULL, tsort, &list);
 	for (i = 0; i < N_THREAD; i++) pthread_join(thread[i], NULL);
 
 	t = clock() - t;
