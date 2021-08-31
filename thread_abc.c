@@ -34,7 +34,7 @@ int main() {
 	for(int i=0; i < 3; i++)
 	{
 		pthread_create(&threads[i], NULL, write, &arg[i]);
-		//pthread_join(threads[i], NULL);
+	//	pthread_join(threads[i], NULL);
 	}
 
 	printf("\n");
